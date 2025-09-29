@@ -57,9 +57,10 @@ You'll see that the code is editing the `inputs:diffuseColor` of the internal re
 ![](./screenshots/InternalReferenceOvrInLayerStack.gif)
 
 ### Overriding an Internal Reference Target from a Different LayerStack
-When you create an external reference of the asset containing the internal references (e.g. a component model referenced into an assembly model), the "links" are hardened to behave like traditional external references losing the "linked" editing experience.
+When you create an external reference of the asset containing the internal references (e.g. a component model referenced into an assembly model), you can no longer author direct opinions on the target of the internal reference. That target is only accessible in the previous LayerStack.
 
-Here is an example of an assembly model that references the previous component model. In this new LayerStack, we attempt to change the color of the bolt "prefab" wanting to broadcast the change to all the prims that reference it.
+Here is an example of an assembly model that references the previous component model. In this new LayerStack, we seemingly have access access to the "Prefabs" prim hierarchy, but that is not the same namespace that was used for the internal references. If you attempt to change the color of the bolt prefab expecting it to broadcast the change to all the prims that reference it like in the previous LayerStack, you'll notice the behavior is different here.
+
 _OverridingReferenceInternalReferencesTest.usda_ 
 ```python
 #usda 1.0
@@ -97,9 +98,9 @@ def Xform "World" (
     }
 }
 ```
-When you load `./OverridingReferencedInternalReferencesTest.usda` on the stage, you can see that the override is applied and correctly resolved on the "prefab".
+When you load `./OverridingReferencedInternalReferencesTest.usda` on the stage, you can see that the override is applied and correctly resolved on the prefab.
 ![](screenshots/external_reference_prefab_override.png)
-But the prims that are internally referencing that target, show that their resolved value has not changed.
+But the repetitions of that bolt, show that their resolved value has not changed.
 ![](screenshots/external_reference_copy_unaffected.png)
 
 ## License
