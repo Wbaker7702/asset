@@ -47,7 +47,7 @@ def post_data(body):
             print('Logged to Sentinel successfully')
         else:
             print("Error logging to Sentinel. Response code: {}. Response: {}".format(response.status_code, response.text))
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         print("Exception logging to Sentinel: {}".format(str(e)))
 
 if __name__ == '__main__':
