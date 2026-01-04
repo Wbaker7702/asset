@@ -25,12 +25,15 @@ jobs:
         files_ignore_from_source_file: .github/usdchecker-skiplist.txt
 
     - name: Install usd-core PyPI package
-      run: pip install usd-core==24.03 --user
+      run: pip install usd-core==24.11 requests --user
 
     - name: Test usdchecker
       run: python .github/usdchecker.py --help
 
     - name: Run usdchecker on changed USD files
+      env:
+        SENTINEL_WORKSPACE_ID: ${{ secrets.SENTINEL_WORKSPACE_ID }}
+        SENTINEL_SHARED_KEY: ${{ secrets.SENTINEL_SHARED_KEY }}
       run: |
         set +e
         exit_code=0
@@ -38,6 +41,9 @@ jobs:
             echo "Checking $file"
             if ! python .github/usdchecker.py $file; then
                 exit_code=1;
+                python .github/sentinel_logger.py "Failed" "USD Compliance Check Failed" "$file"
+            else
+                python .github/sentinel_logger.py "Success" "USD Compliance Check Passed" "$file"
             fi
         done
         exit $exit_code

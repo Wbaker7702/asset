@@ -26,6 +26,7 @@ from __future__ import print_function
 import argparse
 import itertools
 import sys
+import os
 
 from contextlib import contextmanager
 
@@ -114,6 +115,12 @@ def main():
         # If there's no input file to check, exit after dumping the rules.
         if args.inputFile is None:
             return 0
+
+    if args.inputFile and os.path.exists(args.inputFile):
+        file_size = os.path.getsize(args.inputFile)
+        # Warning if larger than 50MB
+        if file_size > 50 * 1024 * 1024: # Consider defining MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024
+            print(TermColors.WARN + "Warning: File size {:.2f}MB exceeds recommended 50MB limit.".format(file_size/1024.0/1024.0) + TermColors.END)
 
     checker.CheckCompliance(inputFile)
 
