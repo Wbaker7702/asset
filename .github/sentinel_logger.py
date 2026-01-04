@@ -65,7 +65,7 @@ if __name__ == '__main__':
         "FilePath": file_path,
         "Repo": os.environ.get('GITHUB_REPOSITORY', 'unknown'),
         "RunId": os.environ.get('GITHUB_RUN_ID', 'unknown'),
-        "Timestamp": str(datetime.datetime.utcnow())
+        "Timestamp": datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
     }]
     
     body = json.dumps(data)
