@@ -119,7 +119,7 @@ def main():
     if args.inputFile and os.path.exists(args.inputFile):
         file_size = os.path.getsize(args.inputFile)
         # Warning if larger than 50MB
-        if file_size > 50 * 1024 * 1024:
+        if file_size > 50 * 1024 * 1024: # Consider defining MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024
             print(TermColors.WARN + "Warning: File size {:.2f}MB exceeds recommended 50MB limit.".format(file_size/1024.0/1024.0) + TermColors.END)
 
     checker.CheckCompliance(inputFile)
