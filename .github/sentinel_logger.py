@@ -46,7 +46,7 @@ def post_data(body):
         if (response.status_code >= 200 and response.status_code <= 299):
             print('Logged to Sentinel successfully')
         else:
-            print("Error logging to Sentinel. Response code: {}".format(response.status_code))
+            print("Error logging to Sentinel. Response code: {}. Response: {}".format(response.status_code, response.text))
     except Exception as e:
         print("Exception logging to Sentinel: {}".format(str(e)))
 
