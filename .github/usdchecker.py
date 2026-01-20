@@ -30,7 +30,7 @@ import os
 
 from contextlib import contextmanager
 
-from pxr import Ar, Sdf, Usd, UsdGeom, UsdShade, UsdUtils
+from pxr import Ar, Sdf, Usd, UsdGeom, UsdShade, UsdUtils, Tf
 
 class TermColors:
     WARN = '\033[93m'
@@ -122,7 +122,14 @@ def main():
         if file_size > 50 * 1024 * 1024: # Consider defining MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024
             print(TermColors.WARN + "Warning: File size {:.2f}MB exceeds recommended 50MB limit.".format(file_size/1024.0/1024.0) + TermColors.END)
 
-    checker.CheckCompliance(inputFile)
+    try:
+        checker.CheckCompliance(inputFile)
+    except Tf.ErrorException as e:
+        # Check if it is the known usdHydra issue
+        if "Could not find shader resource: shaderDefs.usda" in str(e):
+             print(TermColors.WARN + "Warning: Skipping shader definition checks due to missing usdHydra resources." + TermColors.END)
+        else:
+             raise
 
     warnings = checker.GetWarnings()
     errors = checker.GetErrors()
